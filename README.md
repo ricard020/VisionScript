@@ -36,7 +36,7 @@ VisionScript proporciona una solucion de reconocimiento de texto e interpretacio
 
 ## Demo en Vivo
 
-Puedes ver la aplicación funcionando aquí: [[Enlace a Vercel]]
+Puedes ver la aplicación funcionando aquí: [[[Enlace a Vercel](https://vision-script-zeta.vercel.app/)]]
 
 ## Estructura del Proyecto
 
