@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>VisionScript | Imagen a texto al instante</title>
+    <link rel="icon" type="image/x-icon" href="assets/icons/logo.ico">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Google Fonts: Manrope -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Fira+Code:wght@300..700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="css/styles.css" />
+    <!-- Tailwind Configuration -->
+    <script src="js/tailwind-config.js"></script>
+    <script src="js/main.js" defer></script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-text-main dark:text-white transition-colors duration-200 min-h-screen flex flex-col lg:overflow-hidden">
+    <!-- Top Navigation Bar -->
+    <header
+        class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-100 dark:border-gray-800 bg-white dark:bg-surface-dark px-6 py-3 shadow-sm z-10 h-16 flex-none">
+        <div class="flex items-center gap-4">
+            <div class="size-10 flex items-center justify-center">
+                <img src="assets/images/logo.png" alt="VisionScript Logo" class="h-full w-auto object-contain" />
+            </div>
+            <div class="flex flex-col">
+                <h1 class="text-xl font-bold tracking-tight text-gray-900 dark:text-white leading-none">VisionScript
+                </h1>
+                <p class="text-[10px] text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider mt-1">Imagen
+                    a texto al instante</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <!-- Theme Toggle -->
+            <button id="themeToggle" title="Cambiar tema"
+                class="size-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                <span class="material-symbols-outlined dark:hidden">dark_mode</span>
+                <span class="material-symbols-outlined hidden dark:inline">light_mode</span>
+            </button>
+            <!-- Info Button -->
+            <button id="infoButton" title="Información de la app"
+                class="size-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                <span class="material-symbols-outlined">info</span>
+            </button>
+        </div>
+    </header>
+    <!-- Main Workspace Area -->
+    <main
+        class="flex-1 flex flex-col lg:flex-row h-auto lg:h-[calc(100vh-64px)] lg:overflow-hidden bg-surface-light dark:bg-background-dark">
+        <!-- Left Pane: Input Area -->
+        <section
+            class="flex-1 flex flex-col min-w-0 border-r border-gray-100 dark:border-gray-800 relative lg:overflow-hidden min-h-[500px] lg:min-h-0">
+            <div class="flex flex-col h-full">
+                <!-- Header (Fixed) -->
+                <div class="flex-none px-4 pt-4 lg:px-8 lg:pt-8 pb-4">
+                    <div class="max-w-3xl mx-auto w-full flex flex-col">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Imagen de Origen</h2>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Sube documentos para extraer
+                                    texto.</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Content (Scrollable) -->
+                <div class="flex-1 min-h-0 px-4 pb-4 lg:px-8 lg:pb-8 flex flex-col overflow-hidden">
+                    <div class="max-w-3xl mx-auto w-full h-full flex flex-col">
+                        <!-- Drop Zone -->
+                        <div class="flex-1 flex flex-col">
+                            <div id="dropZone"
+                                class="relative group flex-1 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-primary/30 bg-white dark:bg-surface-dark hover:border-primary hover:bg-primary/5 transition-all duration-300 ease-out cursor-pointer shadow-soft">
+                                <!-- Empty State Content -->
+                                <div id="emptyState"
+                                    class="flex flex-col items-center gap-6 p-8 text-center animate-fade-in">
+                                    <div
+                                        class="size-20 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2 group-hover:scale-110 transition-transform duration-300">
+                                        <span class="material-symbols-outlined text-4xl">cloud_upload</span>
+                                    </div>
+                                    <div class="space-y-2 max-w-md">
+                                        <p class="text-xl font-bold text-gray-900 dark:text-white">Subir Imagen de
+                                            Origen</p>
+                                        <p class="text-gray-500 dark:text-gray-400">Arrastra y suelta una imagen (JPG,
+                                            PNG)
+                                            aquí, o
+                                            pega directamente desde tu portapapeles.</p>
+                                    </div>
+                                    <div class="flex flex-col gap-3 w-full max-w-xs mt-4">
+                                        <input type="file" id="fileInput" accept="image/*" class="hidden" />
+                                        <button id="browseBtn"
+                                            class="w-full flex items-center justify-center gap-2 h-12 bg-primary hover:bg-primary-hover text-white rounded-xl font-bold shadow-lg shadow-primary/20 transition-all active:scale-95">
+                                            <span class="material-symbols-outlined">folder_open</span>
+                                            <span>Examinar Archivos</span>
+                                        </button>
+                                        <div class="relative flex items-center justify-center">
+                                            <span
+                                                class="bg-white dark:bg-surface-dark px-2 text-xs text-gray-400 uppercase tracking-widest z-10">O</span>
+                                            <div aria-hidden="true" class="absolute inset-0 flex items-center">
+                                                <div class="w-full border-t border-gray-100 dark:border-gray-700"></div>
+                                            </div>
+                                        </div>
+                                        <button id="pasteBtn"
+                                            class="w-full flex items-center justify-center gap-2 h-10 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-sm font-semibold transition-colors">
+                                            <span class="material-symbols-outlined text-[18px]">content_paste</span>
+                                            <span>Pegar desde Portapapeles (Ctrl+V)</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Image Preview (Hidden by default) -->
+                                <div id="imagePreview"
+                                    class="hidden relative lg:absolute lg:inset-0 z-10 w-full h-auto min-h-[300px] lg:h-full lg:min-h-0 p-4 overflow-auto bg-gray-50/50 dark:bg-black/20 flex custom-scrollbar rounded-2xl">
+                                    <img id="previewImg" src="" alt="Vista previa"
+                                        class="max-w-none transition-all duration-200 m-auto"
+                                        style="max-width: 100%; object-fit: contain;" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+        <!-- Right Pane: Result Area -->
+        <section class="flex-1 bg-panel-bg dark:bg-[#121214] flex flex-col min-w-0 relative min-h-[150px] lg:min-h-0">
+            <!-- Progress / Status Header -->
+            <div
+                class="px-6 py-4 bg-white dark:bg-surface-dark border-b border-gray-100 dark:border-gray-800 flex flex-col gap-3 shadow-sm z-10">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <h3 class="font-bold text-gray-900 dark:text-white">Resultado</h3>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <!-- Clear Button -->
+                        <button id="clearBtn" title="Limpiar todo"
+                            class="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-500 transition-colors">
+                            <span class="material-symbols-outlined">cleaning_services</span>
+                        </button>
+                        <!-- Download Button -->
+                        <button id="downloadBtn" title="Descargar como .txt"
+                            class="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 dark:hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">download</span>
+                        </button>
+                        <!-- Edit Button -->
+                        <button id="editBtn" title="Editar texto"
+                            class="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 dark:hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">edit</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Status Bar -->
+                <div id="progressContainer" class="hidden flex items-center gap-3">
+                    <div class="flex-1 h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                        <div id="progressBar"
+                            class="h-full bg-primary w-0 rounded-full shadow-[0_0_10px_rgba(0,163,163,0.5)] transition-all duration-300">
+                        </div>
+                    </div>
+                    <span id="progressText"
+                        class="text-xs font-mono font-medium text-primary whitespace-nowrap">Procesando... 0%</span>
+                </div>
+            </div>
+            <!-- Text Editor Area -->
+            <div class="flex-1 relative lg:overflow-hidden">
+                <div class="relative lg:absolute lg:inset-0 p-4 lg:p-8 lg:overflow-y-auto custom-scrollbar">
+                    <!-- Code/Text Block -->
+                    <div
+                        class="font-mono text-sm leading-relaxed text-gray-700 dark:text-gray-300 bg-white dark:bg-surface-dark rounded-xl shadow-sm p-4 lg:p-8 min-h-[150px] lg:min-h-full border border-gray-200/50 dark:border-gray-700 relative">
+                        <!-- Line Numbers (Visual Effect) -->
+                        <div class="h-full">
+                            <p id="waitingText" class="mb-6 opacity-40 italic select-none">Esperando entrada...</p>
+                            <pre id="extractedText" class="hidden whitespace-pre-wrap max-h-[50vh] overflow-y-auto custom-scrollbar"></pre>
+                            <textarea id="editableText"
+                                class="hidden w-full h-[50vh] bg-transparent border-none outline-none resize-none whitespace-pre-wrap font-mono text-sm overflow-y-auto custom-scrollbar"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- Floating Action Button -->
+                <div class="absolute bottom-8 right-8 z-20">
+                    <button id="copyBtn" title="Copiar"
+                        class="flex items-center justify-center size-14 rounded-full bg-primary hover:bg-primary-hover text-white shadow-lg hover:shadow-xl shadow-primary/30 transition-all duration-300 active:scale-90">
+                        <span id="copyIcon" class="material-symbols-outlined text-2xl">content_copy</span>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Info Modal -->
+    <div id="infoModal"
+        class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl max-w-md w-full p-6 relative animate-fade-in">
+            <button id="closeModal"
+                class="absolute top-4 right-4 size-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <span class="material-symbols-outlined text-gray-500">close</span>
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <div class="size-12 flex items-center justify-center">
+                    <img src="assets/images/logo.png" alt="VisionScript Logo" class="h-full w-auto object-contain" />
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white leading-none">VisionScript</h2>
+                    <p class="text-sm font-semibold text-primary mt-2">Versión 1.0.0</p>
+                </div>
+            </div>
+            <div class="space-y-4 text-sm text-gray-600 dark:text-gray-300">
+                <p>Extrae texto de imágenes usando tecnología OCR avanzada. Sube, pega o arrastra imágenes para
+                    reconocer texto en múltiples idiomas.</p>
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-3">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 text-center mb-3">
+                        Desarrollado por Ricardo Torres
+                    </p>
+                    <!-- Social Media Icons -->
+                    <div class="flex items-center justify-center gap-4">
+
+                        <a href="https://linkedin.com/in/" target="_blank" rel="noopener noreferrer" title="LinkedIn"
+                            class="size-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-primary dark:hover:bg-primary hover:text-white transition-all duration-300">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                            </svg>
+                        </a>
+                        <a href="https://github.com/ricard020" target="_blank" rel="noopener noreferrer" title="GitHub"
+                            class="size-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-primary dark:hover:bg-primary hover:text-white transition-all duration-300">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                            </svg>
+                        </a>
+                        <a href="mailto:ricarditojos268@gmail.com" title="Email"
+                            class="size-9 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-primary dark:hover:bg-primary hover:text-white transition-all duration-300">
+                            <span class="material-symbols-outlined text-[20px]">mail</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tesseract.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</body>
+
+</html>
